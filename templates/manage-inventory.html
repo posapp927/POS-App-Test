@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/manage-inventory_styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <button class="cross-button" id="crossButton" data-url="{{ url_for('to_index') }}">✖</button>
+        <div class="top-bar">
+            <div class="top-bar-first-row">
+                <div class="search-container">
+                    <div class="search-icon">
+                        &#128269;
+                    </div>
+                    <input type="text" class="search-input" placeholder="Search Item">
+                </div>
+                <select class="dropdown">
+                    <option>The Little Pet Shop</option>
+                    <!-- Additional options can be added here -->
+                </select>
+                <select class="dropdown">
+                    <option>Select Brands</option>
+                    <!-- Additional options can be added here -->
+                </select>
+                <select class="dropdown">
+                    <option>Select Categories</option>
+                    <!-- Additional options can be added here -->
+                </select>
+                <button class="advanced-filters">Advanced Filters &#9662;</button>
+            </div>
+            <div class="top-bar-second-row">
+                <button class="search-button">Search</button>
+                <input type="file" id="csvFileInput" accept=".csv, .xlsx" style="display: none;" />
+                <button class="import-product-button" id="importButton">Import Products</button>
+                <button class="export-product-button">Export Products</button>
+            </div>
+        </div>
+        <div class="product-table">
+            <table class="product-table general-view">
+                <thead>
+                    <tr>
+                        <th class="select-button-column">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="customCheckbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </th>
+                        <th class="photo-column">Photo</th>
+                        <th class="brand-column">Brand</th>
+                        <th class="name-column">Name</th>
+                        <th class="discounts-column">Price</th>
+                        <th class="qoh-column">Discounts</th>
+                        <th class="empty-column">QOH</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will go here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='scripts/manage-inventory_script.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</body>
+</html>

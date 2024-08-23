@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Table with Search Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <div id="garbage-icon-url" data-url="{{ garbage_icon_url }}"></div>
+    <div class="error-bar" id="errorBar">
+        Item not Found!
+    </div>
+    <div class="container" id="mainContent">
+        <div class="cart-table-container">
+            <div class="row cart-table-header-row">
+                <button class="cart-table-header-box quick-select">
+                    <img src="{{ url_for('static', filename='images/quick select icon.png') }}" alt="Image 1">
+                    <div class="text">Quick Select</div>
+                </button>
+                <button class="cart-table-header-box discount-override">
+                    <img src="{{ url_for('static', filename='images/discount override icon.png') }}" alt="Image 2">
+                    <div class="text">Discount Override</div>
+                </button>
+                <button class="cart-table-header-box special-request">
+                    <img src="{{ url_for('static', filename='images/special request icon.png') }}" alt="Image 3">
+                    <div class="text">Special Request</div>
+                </button>
+                <button class="cart-table-header-box tax-override">
+                    <img src="{{ url_for('static', filename='images/tax override.png') }}" alt="Image 4">
+                    <div class="text">Tax Override</div>
+                </button>
+                <button class="cart-table-header-box refund">
+                    <img src="{{ url_for('static', filename='images/return icon.png') }}" alt="Image 4">
+                    <div class="text">Refund/ Exchange</div>
+                </button>
+                <button class="cart-table-header-box inventory-management" id="manageInventoryButton" data-url="{{ url_for('manage_inventory') }}">
+                    <img src="{{ url_for('static', filename='images/inventory management icon.png') }}" alt="Inventory Management">
+                    <div class="text">Manage Inventory</div>
+                </button>
+                <button class="cart-table-header-box customer-management">
+                    <img src="{{ url_for('static', filename='images/customers icon.png') }}" alt="Image 4">
+                    <div class="text">Customers</div>
+                </button>
+                <button class="cart-table-header-box todo-management">
+                    <img src="{{ url_for('static', filename='images/todo icon.png') }}" alt="Image 4">
+                    <div class="text">Today's Tasks</div>
+                </button>
+                <button class="cart-table-header-box profile-management">
+                    <img src="{{ url_for('static', filename='images/profile icon.png') }}" alt="Image 4">
+                    My Profile
+                </button>
+                <button class="cart-table-header-box cash-register">
+                    <img src="{{ url_for('static', filename='images/cash register icon.png') }}" alt="Cash Register">
+                    <div class="text">Cash Drawer</div>
+                </button>
+            </div>
+            <div class="cart-table">
+                <div class="search-container">
+                    <div class="search-icon">
+                        <img src="{{ url_for('static', filename='images/barcode icon.png') }}" alt="Search Icon">
+                    </div>
+                    <input type="text" class="search-input" placeholder="Search Product or Scan UPC">
+
+                    <div class="search-dropdown">&#9662;</div>
+                </div>
+                <ul class="product-suggestions"></ul>
+                <div class="cart-table-wrapper">
+                    <table class="cart-items-table">
+                        <thead>
+                            <tr>
+                                <th class="item-column">Item</th>
+                                <th class="price-column">Price</th>
+                                <th class="quantity-column">Quantity</th>
+                                <th class="discounts-column">Discounts</th>
+                                <th class="tax-column">Tax</th>
+                                <th class="total-column">Total</th>
+                                <th class="empty-column">
+                                    <img src="{{ url_for('static', filename='images/garbage icon header.png') }}" class="delete-icon header" alt="Delete">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table rows will go here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-container">
+            <button class="new-customer-button">
+                <div class="new-customer-icon">
+                    <img src="{{ url_for('static', filename='images/plus button icon.png') }}" alt="New Customer Icon">
+                </div>
+                <div class="new-customer-text">New Customer</div>
+            </button>
+            <div class="customer-search-container">
+                <span class="customer-search-text">Checkout as a guest, or search for customer by name, phone, or email</span>
+                <div class="customer-search">
+                    <div class="search-icon">
+                        &#128269;
+                    </div>
+                    <input type="text" class="search-input" id="customer-search-input" placeholder="Look Up Customer">
+                    <ul class="suggestions"></ul>
+                </div>
+            </div>
+            <div class="customer-info-container" id="customer-info-container">
+                <div class="remove-customer-icon">
+                    <button class="cross-button" id="crossButton">✖</button>
+                </div>
+                <div class="edit-customer-icon">
+                    <button class="edit-button" id="editButton">
+                        <img src="{{ url_for('static', filename='images/edit icon.png') }}" alt="Edit Customer Icon">
+                    </button>
+                </div>
+
+                <div class="customer-email" id="customer-email">Customer Email</div>
+                <div class="customer-phone" id="customer-phone">Customer Phone</div>
+            </div>
+            <div class="available-offers">
+                <h1>Available Offers</h1>
+                {% for discount_name in discount_names %}
+                <div class="offer" data-discount-name="{{ discount_name }}">
+                    <h4>{{ discount_name }}</h4>
+                    <div class="offer-details" style="display: none;"></div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="total-table-container">
+            <table>
+                <tr>
+                    <td class="total-table-type">Gross Sale</td>
+                    <td class="total-table-amount gross-sale">0.00</td>
+                </tr>
+                <tr>
+                    <td class="total-table-type">Discounts</td>
+                    <td class="total-table-amount discounts">0.00</td>
+                </tr>
+                <tr class="net-sale">
+                    <td class="total-table-type">Net Sale</td>
+                    <td class="total-table-amount net-sale">0.00</td>
+                </tr>
+                <tr>
+                    <td class="total-table-type">Taxable Sales</td>
+                    <td class="total-table-amount taxable-sales">0.00</td>
+                </tr>
+                <tr>
+                    <td class="total-table-type">Total Tax</td>
+                    <td class="total-table-amount total-tax">0.00</td>
+                </tr>
+                <tr class="total-row">
+                    <td class="total-table-type-total">Total</td>
+                    <td class="total-table-amount-total total">0.00</td>
+                </tr>
+            </table>
+        </div>
+        </div>
+        <div class="fixed-bottom-bar">
+            <div class="total-due">
+                Total Due:
+            </div>
+            <div class="payment-section">
+                <span class="total-amount">$0.00</span>
+                <div class="vertical-line"></div>
+                <button class="finish-and-pay">Payment</button>
+            </div>
+        </div>
+        <div id="popup" class="popup-overlay payment">
+            <button class="popup-cross-button" id="close-popup">✖</button>
+            <div class="popup-content order-total">
+                <div class="order-summary">Order Summary</div>
+                    <div class="search-input-wrapper">
+                        <input type="text" class="search-input payment promo-code" id="payment-page-promo-code" placeholder="Enter Promo Code">
+                        <div class="payment-page-search-icon">
+                            &#128269;
+                        </div>
+                    </div>
+                    <div class="order-summary-table">
+                    <table>
+                        <tr>
+                            <td class="order-summary-table-data-header">Gross Sale</td>
+                            <td class="order-summary-table-data gross-sale">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="order-summary-table-data-header">Discounts</td>
+                            <td class="order-summary-table-data discounts">$0.00</td>
+                        </tr>
+                        <tr class="order-summary-net-sale">
+                            <td class="order-summary-table-data-header">Net Sale</td>
+                            <td class="order-summary-table-data net-sale">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr class="summary-line"></td>
+                        </tr>
+                        <tr>
+                            <td class="order-summary-table-data-header">Taxable Sales</td>
+                            <td class="order-summary-table-data taxable-sales">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="order-summary-table-data-header">Total Tax</td>
+                            <td class="order-summary-table-data total-tax">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="order-summary-table-data-header">Deposit</td>
+                            <td class="order-summary-table-data deposit">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr class="summary-line"></td>
+                        </tr>
+                        <tr class="order-summary-total-row">
+                            <td class="order-summary-table-data-header">Total</td>
+                            <td class="order-summary-table-data total">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="order-summary-table-data-header paid">Paid</td>
+                            <td class="order-summary-table-data paid">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr class="summary-line"></td>
+                        </tr>
+                        <tr class ="order-summary-total-due">
+                            <td class="order-summary-table-data-header total-due">Total Due</td>
+                            <td class="order-summary-table-data total-due">$0.00</td>
+                        </tr>
+                    </table>
+                </div>
+                <button class="finish-sale" id="finishSaleButton">
+                    Finish Sale
+                </button>
+            </div>
+            <div class="popup-content payment-details">
+                <div class="payment-type-container card">
+                    <div class="payment-type-icon card">
+                        <img src="{{ url_for('static', filename='images/card payment icon.png') }}" alt="Card Payment Icon">
+                        Card
+                    </div>
+                    <div class="card-payment-amount-selector-container">
+                        <div class="card-payment-amount-selector full-amount">
+                            <input type="radio" id="fullAmountToCard" name="payment" value="" checked>
+                            <label for="fullAmountToCard">Charge <span id="fullAmount">$0.00</span> to Card</label>
+                        </div>
+                        <div class="card-payment-amount-selector custom-amount">
+                            <input type="radio" id="customAmountToCard" name="payment" value="">
+                            <label for="customAmountToCard">Charge Custom Amount to Card</label>
+                        </div>
+                    </div>
+                    <div class="process-card-payment">
+                        <button class="payment-processed-button ready">
+                            Payment Processed
+                        </button>
+                    </div>
+                </div>
+                <div class="payment-type-container cash">
+                    <div class="payment-type-icon cash">
+                        <img src="{{ url_for('static', filename='images/cash payment icon.png') }}" alt="Cash Payment Icon">
+                        Cash
+                    </div>
+                    <div class="process-cash-payment">
+                        <div class="cash-amount-received">
+                            <button class="exact-cash-amount ready">
+                                $0.00
+                            </button>
+                            <button class="next-dollar ready">
+                                $0.00
+                            </button>
+                            <button class="next-large-bill ready">
+                                $0.00
+                            </button>
+                            <button class="custom-amount ready">
+                                Custom
+                            </button>
+                        </div>
+                        <button class="open-cash-drawer not-ready">
+                            <img src="{{ url_for('static', filename='images/cash register icon.png') }}" alt="Cash Register">
+                            <div class="text">Open</div>
+                        </button>
+                    </div>
+                </div>
+                <div class="payment-type-container gift-card">
+                    <div class="payment-type-icon gift-card">
+                        <img src="{{ url_for('static', filename='images/gift card payment icon.png') }}" alt="Gift Card Payment Icon">
+                        Gift Card
+                    </div>
+                    <div class="gift-card-input">
+                        <input type="text" class="gift-card-number-input" placeholder="Scan or Enter Gift Card Barcode">
+                        <button class="apply-gift-card not-ready">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="customAlert" class="custom-alert" style="display:none;">
+                <div class="custom-alert-content">
+                    <button class="cross-button close-btn" id="closeAlert">✖</button>
+                    <p>Please select a payment type received first!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="print-receipt-popup">
+        <button class="print-receipt-button" onclick="printReceipt()">
+            <img src="{{ url_for('static', filename='images/print receipt icon.png') }}" alt="Cash Register">
+            <div class="text">Receipt</div>
+        </button>
+        <button class="do-not-print-receipt-button">
+            <img src="{{ url_for('static', filename='images/do not print receipt icon.png') }}" alt="Cash Register">
+            <div class="text">No Receipt</div>
+        </button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</body>
+</html>

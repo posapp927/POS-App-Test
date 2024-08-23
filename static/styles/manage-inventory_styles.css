@@ -1,0 +1,263 @@
+
+
+/* Styles for the container */
+.container {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Styles for the top bar */
+.top-bar {
+    width: 100%;
+    margin: 0 auto; /* Center horizontally */
+    background-color: #f0f0f0; /* Light gray background */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Arrange first-row and second-row in columns */
+	border-radius: 5px;
+	box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.top-bar-first-row,
+.top-bar-second-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out elements evenly */
+	flex-direction: row;
+	box-shwadow: none;
+	padding: 20px;
+}
+
+.top-bar-first-row {
+	border-radius: 5px 5px 0 0;
+
+}
+
+.top-bar-second-row {
+	border-radius: 0 0 5px 5px;
+
+}
+
+
+/* Styles for the search container */
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: white;
+}
+
+.search-icon img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 1em;
+}
+
+/* Styles for the dropdowns */
+.dropdown {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 1em;
+}
+
+/* Styles for the advanced filters button */
+.advanced-filters {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 1em;
+    color: #cc5500; /* Orange color for text */
+    cursor: pointer;
+    background-color: #f0f0f0; /* Light gray background */
+}
+
+/* Styles for the search button */
+.search-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #d50912; /* Orange background */
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #ab030b; /* Darker orange on hover */
+}
+
+.import-product-button,
+.export-product-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #d50912; /* Orange background */
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.import-product-button:hover,
+.export-product-button:hover {
+    background-color: #ab030b; /* Darker orange on hover */
+}
+
+/* Cross button styles */
+.cross-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #000;
+}
+
+.cross-button:hover {
+    color: #ff0000;
+}
+
+
+
+
+
+.product-table.general-view {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px 10px 0 0; /* Rounded corners */
+    overflow: hidden; /* To apply the border-radius */
+	margin-top: 10px;
+}
+
+.product-table.general-view th,
+.product-table.general-view td {
+    text-align: left;
+    padding: 16px; /* Increased padding for bigger cell size */
+    font-size: 1.5em; /* Increased font size */
+}
+
+/* Style for the select-button-column */
+.select-button-column {
+    display: flex;
+    align-items: center;
+}
+
+/* Hide the default checkbox */
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkmark */
+.custom-checkbox {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Checkmark background */
+.custom-checkbox .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 20px; /* Adjust height */
+    width: 20px; /* Adjust width */
+    background-color: #eee;
+    border-radius: 4px;
+    transform: translateY(-50%);
+}
+
+/* Checkmark after being checked */
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: #28a745; /* Green color */
+}
+
+/* Checkmark icon */
+.custom-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show checkmark icon */
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Checkmark icon styling */
+.custom-checkbox .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.product-table.general-view th {
+    background-color: #cc0001; /* Background color for headers */
+    color: #fff; /* Black text color */
+	border: 1px solid #fff; /* White border for table cells */
+	height: 30px;
+    vertical-align: middle; /* Center content vertically */
+    text-align: center; /* Center content horizontally */
+}
+
+.product-table.general-view th.select-button-column.custom-checkbox {
+    width: 2%;
+    vertical-align: middle; /* Center content vertically */
+}
+
+.product-table.general-view th.photo-column {
+    width: 18%;
+}
+
+.product-table.general-view th.brand-column {
+    width: 13%;
+}
+
+.product-table.general-view th.name-column {
+    width: 32%;
+}
+
+.product-table.general-view th.price-column {
+    width: 12%;
+}
+
+.product-table.general-view th.discounts-column {
+    width: 12%;
+}
+
+.product-table.general-viewth.qoh-column {
+    width: 11%;
+}
+
+/* Style for the photo column images */
+.photo-column img {
+    max-width: 13vh;
+	max-height: 13vh;
+    object-fit: contain;
+}
+
